@@ -8,26 +8,12 @@ from email.mime import application
 capture_path = "C:\\Users\\HC\\OneDrive\\ICE\\capture\\"
 
 
-
 def locateOnScreen(file_name, path=capture_path):
     num = pa.locateOnScreen(capture_path + file_name)
     if num is None:
         pa.alert(text="", title="이미지가 화면에 없습니다.", button="OK")
         exit(0)
     return num
-
-def open_window_with_handle(handle):
-    # found_index 0는 pywinauto.findwindows.ElementAmbiguousError 를 없애기 위해 사용.
-    return Application("uia").connect(handle=handle).window(found_index=0)
-
-def save_files_with_window(window):
-    """
-    window 를 이용해서 file 을 저장함
-    """
-    window.ToolBar.저장Button.click()
-    # window.Pane1.ComboBox2.열기.click()
-    # print(window.Pane1.ComboBox2.print_config_identifier())
-
 
 
 """

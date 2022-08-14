@@ -2,84 +2,15 @@ import time
 import pyautogui as pa
 import os
 import subprocess
-from pywinauto.application import Application
-from pywinauto import Desktop
-from pywinauto import timings
+from functions_initialization import *
+from deprecated_functions_pyautogui import *
+from functions_print_files_in_a_folder import Print_files_in_a_folder
 
-from bs4 import BeautifulSoup as bs
-from selenium import webdriver
-from functions_pyautogui import *
-
-tmp_env = os.environ["TEMP"]
-tmp_path = tmp_env + "\\pyauto"
-command_del_tmp = "del /q /s /f " + tmp_path + "\\*"
-command_kill_groupware = "taskkill /f /im SaViewX.exe"
-command_kill_hwx = "taskkill /f /im XSViewer.exe"
-command_kill_alzip_auirender = "taskkill /f /im auirender.exe"
-command_kill_alzip = "taskkill /f /im Alzip.exe"
-timeU = Sleep(0.5)
-
-os.system("mkdir " + tmp_path)
-###### Chrome WebDriver를 이용해 Chrome을 실행합니다.
-#####driver =  webdriver.Ie('C:\\Users\\AdmiN\\automation\\driver\\ie\\IEDriverServer.exe')
-#####gh_path = "http://g0.gh.or.kr"
-#####
-###### www.google.com으로 이동합니다.
-######driver.get("http://www.google.com/search?q=사과")
-#####driver.get(gh_path + "/jsp/Main.jsp")
-#####time.sleep(2)
-#####
-#####'''
-#####Explorer 로그인, 문서함, 원하는 화면 띄우기를 기다리기
-#####'''
-#####breakpoint()
-######html = driver.page_source
-######soup = bs(html)
-#####
-#####
-#####'''
-#####HTML 상에는 게시글 관련 코드가 없고, frame 내부로 한단계씩 타고 들어가며 새로운 html 을 가져와야 함
-#####아래는 IE 전용 코드이고, chrome 은 다른 코드를 사용해야 함
-#####https://stackoverflow.com/questions/28761461/i-am-not-able-to-switch-to-iframe-using-internet-explorer
-#####'''
-#####from selenium.webdriver.common.by import By
-#####
-#####driver.switch_to.frame(driver.find_element(By.NAME, 'Start'))
-#####driver.switch_to.frame(driver.find_element(By.NAME, 'doc_frame_right'))
-#####
-#####'''
-#####IE 의 개발자모드에서 HTML source 를 보며 게시글에 해당하는 element 를 가져옴
-#####https://selenium-python.readthedocs.io/locating-elements.html
-#####'''
-#####elements = driver.find_elements(By.XPATH, "/html/body/form/table/tbody/tr/td/table/tbody/tr/td/table/tbody/tr/td[@class='Bsc']")
-#####
-###### 위 코드는 완벽하진 않지만, 예외적인 Bsc 를 모두 클릭해도 문제는 없음.
-#####for html_el in elements:
-#####    if html_el.size['width'] > 250:
-#####        #size로 구분
-#####        process_el = retry_click_until_process_open(html_el)
-#####        breakpoint()
-#####        print('d')
-
-
-def saving_files_in_one_paper(name):
-    """
-    하나의 게시글의 모든 파일을 저장하는 함수
-    """
-    process_el = find_element_with_name(name)
-    window = open_window_with_handle(process_el.handle)
-    save_files_with_window(window)
-    os.system(command_del_tmp)
-
-    wait_for_process_open_with_name("다른 이름으로")
-    pa.hotkey("ctrl", "l")
-    pa.typewrite(tmp_path)
-    pa.press("enter")
-    pa.hotkey("alt", "s")
-
-    timeU.sleep(2)
-    os.system(command_kill_groupware)
-    timeU.sleep(1)
+Initialization()
+password_input = "1010, 1011"
+pff = Print_files_in_a_folder(password_list=password_input.split(","))
+pff.print_files_in_a_folder(tmp_path)
+exit(0)
 
 
 def print_contents_in_files():
@@ -119,7 +50,7 @@ def print_contents_in_files():
             pa.hotkey("alt", "d")
             wait_for_process_open_with_name("인쇄")
             wait_for_process_kill_with_name("인쇄")
-            os.system(command_kill_hwx)
+            os.system(command_kill_format + exe_name_dict["hwx"])
 
 
 print_contents_in_files()

@@ -1,10 +1,9 @@
 import time
 
 
-class timeU:
+class TimeU:
     def __init__(self, weight=1):
         self.weight = weight
-        pass
 
     def sleep(self, mag):
         time.sleep(mag * self.weight)
