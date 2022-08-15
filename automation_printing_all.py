@@ -6,9 +6,9 @@ from functions_initialization import *
 from deprecated_functions_pyautogui import *
 from functions_print_files_in_a_folder import Print_files_in_a_folder
 
-Initialization()
-password_input = "1010, 1011"
-pff = Print_files_in_a_folder(password_list=password_input.split(","))
+init = Initialization()
+breakpoint()
+pff = Print_files_in_a_folder(password_list=init.password)
 pff.print_files_in_a_folder(tmp_path)
 exit(0)
 
