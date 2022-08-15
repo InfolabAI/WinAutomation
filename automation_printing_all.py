@@ -4,59 +4,11 @@ import os
 import subprocess
 from functions_initialization import *
 from deprecated_functions_pyautogui import *
-from functions_print_files_in_a_folder import Print_files_in_a_folder
+from functions_selenium import Manage_selenium_IE
 
 init = Initialization()
-breakpoint()
-pff = Print_files_in_a_folder(password_list=init.password)
-pff.print_files_in_a_folder(tmp_path)
-exit(0)
-
-
-def print_contents_in_files():
-    file_list = os.listdir(tmp_path)
-    for fname in file_list:
-        if ".zip" in fname:
-            os.system(command_kill_alzip)
-            os.system(command_kill_alzip_auirender)
-            # 띄어쓰기 문제 해결 및 경로 문제 해결
-            subprocess.Popen(f'"{tmp_path}\\{fname}"', shell=True)
-            process_el = wait_for_process_open_with_name(fname[:10])
-            window = open_window_with_handle(process_el.handle)
-            window.압축풀기Button.click()
-            process_el_sub = wait_for_process_open_with_name("압축풀기")
-            window_sub = open_window_with_handle(process_el_sub.handle)
-            pa.typewrite(tmp_path)
-            # 선택된 폴더 하위에 압축파일명으로 폴더 생성(F) 의 상태 확인 후 켜기
-            while window_sub["선택된 폴더 하위에 압축파일명으로 폴더 생성"].get_toggle_state() == 0:
-                window_sub["선택된 폴더 하위에 압축파일명으로 폴더 생성"].click()
-                timeU.sleep(0.1)
-            while window_sub["압축풀기 후 폴더열기"].get_toggle_state() == 1:
-                window_sub["압축풀기 후 폴더열기"].click()
-                timeU.sleep(0.1)
-            pa.press("enter")
-
-            timeU.sleep(0.1)
-            process_password("비밀번호", ["1000", "1010", "1011", "1021"])
-            # 알집 window 중복 문제 해결해야 함
-            os.system(command_kill_alzip)
-            os.system(command_kill_alzip_auirender)
-
-        if ".hwx" in fname:
-            # 띄어쓰기 문제 해결 및 경로 문제 해결
-            subprocess.Popen(f'"{tmp_path}\\{fname}"', shell=True)
-            wait_for_process_open_with_name(fname[:10])
-            pa.hotkey("ctrl", "p")
-            pa.hotkey("alt", "d")
-            wait_for_process_open_with_name("인쇄")
-            wait_for_process_kill_with_name("인쇄")
-            os.system(command_kill_format + exe_name_dict["hwx"])
-
-
-print_contents_in_files()
-breakpoint()
-
-
+msi = Manage_selenium_IE(init)
+msi.end_to_end()
 exit(0)
 
 """

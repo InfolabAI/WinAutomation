@@ -24,11 +24,8 @@ class Password_interface(InterfaceU):
     def password_start_check(self):
         """
         password 가 걸려있고, 입력창이 떴으면 True 없으면 False"""
-        self.time.sleep(1)
-        if self.mp.find_element_with_name(self.name) is None:
-            return False
-        else:
-            return True
+        # 파일 이름에 '암호' 라는 말이 있을 경우, 암호 창의 '암호'와 모호해짐. 그래서 정확한 이름으로 진행
+        return self.mp.wait_with_exact_name(3,0.2, self.name)
 
     def password_check(self):
         """

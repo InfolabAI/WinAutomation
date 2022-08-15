@@ -9,6 +9,26 @@ class Manage_process(InterfaceU):
         self.patience_num = 10
         pass
 
+    def find_control(self, window, class_type, sub_text):
+        ''' 원하는 control 을 찾는다
+        Args:
+            window: window 객체
+            class_type: Static, Combobox, Button, Edit, Checkbox
+            sub_text: 검색할 text 의 sub
+            '''
+        
+        for i in range(1, 50):
+            classNN = str(class_type + str(i))
+            try:
+                # 정리> 이렇게 하면 Combobox 내 모든 정보를 함께 검색할 수 있음.
+                text = str(window[classNN].get_properties()['texts'])
+            except:
+                continue
+            if sub_text in text:
+                break
+        
+        return window[classNN], classNN, text
+
     @classmethod
     def find_element_with_name(self, name):
         """
@@ -34,10 +54,16 @@ class Manage_process(InterfaceU):
         """
         process_el = None
         for i in range(self.patience_num + 1):
+            print(html_el.text)
             html_el.click()
-            self.time.sleep(2)
+            self.time.sleep(5)
             main_text = html_el.text.lstrip(" ").rstrip(" ").rstrip(".").rstrip(" ")
-            process_el = self.find_element_with_name(main_text)
+            '''
+            아래의 경우, 모든 제목으로 검색해서는 찾을 수 없음. 그래서 앞에서 15자를 잘라서 수행
+            제목:   (지출-08110005)주택공급1부 7월 급량비 지출[0812...  
+            프로세스 제목: (지출-08110005)주택공급1부 7월 급량비 지출
+            '''
+            process_el = self.find_element_with_name(main_text[:15])
             if process_el is not None:
                 break
 
@@ -98,19 +124,33 @@ class Manage_process(InterfaceU):
         else:
             return True
 
-    def open_window_with_handle(self, handle):
-        # found_index 0는 pywinauto.findwindows.ElementAmbiguousError 를 없애기 위해 사용.
-        return Application().connect(handle=handle).window(found_index=0)
+    def open_window_with_handle(self, handle, uia=False):
+        if uia:
+            return Application('uia').connect(handle=handle).window(found_index=0)
+        else:
+            # found_index 0는 pywinauto.findwindows.ElementAmbiguousError 를 없애기 위해 사용.
+            return Application().connect(handle=handle).window(found_index=0)
 
-    def open_window_with_name(self, name):
-        # found_index 0는 pywinauto.findwindows.ElementAmbiguousError 를 없애기 위해 사용.
-        return pywinauto.Application().connect(title=name).window(found_index=0)
+    def open_window_with_name(self, name, uia=False):
+        if uia:
+            # found_index 0는 pywinauto.findwindows.ElementAmbiguousError 를 없애기 위해 사용.
+            return pywinauto.Application('uia').connect(found_index=0, title=name).window(found_index=0)
+        else:
+            # found_index 0는 pywinauto.findwindows.ElementAmbiguousError 를 없애기 위해 사용.
+            return pywinauto.Application().connect(found_index=0, title=name).window(found_index=0)
+            
 
-    def open_window_with_class_name(self, class_name):
-        # found_index 0는 pywinauto.findwindows.ElementAmbiguousError 를 없애기 위해 사용.
-        return (
-            pywinauto.Application().connect(class_name=class_name).window(found_index=0)
-        )
+    def open_window_with_class_name(self, class_name, uia=False):
+        if uia:
+            # found_index 0는 pywinauto.findwindows.ElementAmbiguousError 를 없애기 위해 사용.
+            return (
+                pywinauto.Application('uia').connect(found_index=0, class_name=class_name).window(found_index=0)
+            )
+        else:
+            # found_index 0는 pywinauto.findwindows.ElementAmbiguousError 를 없애기 위해 사용.
+            return (
+                pywinauto.Application().connect(found_index=0, class_name=class_name).window(found_index=0)
+            )
 
     def wait_with_class_name(self, try_num, interval, class_name):
         for i in range(try_num):
@@ -122,6 +162,28 @@ class Manage_process(InterfaceU):
         return False
 
     def wait_with_name(self, try_num, interval, name):
+        '''
+        이름이 sub token 이어도 됨'''
+        for i in range(try_num):
+            self.time.sleep(interval)
+            if self.find_element_with_name(name) is not None:
+                return True
+
+        return False
+
+    def wait_kill_with_name(self, try_num, interval, name):
+        '''
+        이름이 sub token 이어도 됨'''
+        for i in range(try_num):
+            self.time.sleep(interval)
+            if self.find_element_with_name(name) is None:
+                return True
+
+        return False
+
+    def wait_with_exact_name(self, try_num, interval, name):
+        '''
+        이름이 정확해야만 함'''
         for i in range(try_num):
             self.time.sleep(interval)
             list_ = pywinauto.findwindows.find_elements(title=name)

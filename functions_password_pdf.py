@@ -2,10 +2,10 @@ import pyautogui
 from functions_password_interface import Password_interface
 
 
-class Password_excel(Password_interface):
+class Password_pdf(Password_interface):
     def __init__(self, password_list):
         super().__init__("암호", password_list)
-        self.password_error_name = "Microsoft Excel"
+        self.password_error_name = "Foxit PhantomPDF"
 
     def password_once(self, password):
         # 비밀번호 Edit window 에 focus 하기
