@@ -33,12 +33,7 @@ class Manage_pdf(Manage_interface):
         # 너무 빨리 다시 실행하면 프로세스가 완전히 종료되기 전이기 때문에 1초 기다림
         #self.time.sleep(1)
 
-        # 띄어쓰기 문제 해결 및 경로 문제 해결
-        subprocess.Popen(f'"{tmp_path}\\{fname}"', shell=True)
-        if self.mp.wait_with_class_name(20, 0.5, "classFoxitPhantom"):
-            pass
-        else:
-            Msgbox.error("Foxit pdf가 켜지지 않았습니다.")
+        self.is_process_open(fname, "classFoxitPhantom")
 
         #self.time.sleep(5)
 

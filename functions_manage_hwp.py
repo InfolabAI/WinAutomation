@@ -33,13 +33,7 @@ class Manage_hwp(Manage_interface):
         # 너무 빨리 다시 실행하면 프로세스가 완전히 종료되기 전이기 때문에 1초 기다림
         #self.time.sleep(1)
 
-        # 띄어쓰기 문제 해결 및 경로 문제 해결
-        subprocess.Popen(f'"{tmp_path}\\{fname}"', shell=True)
-        # 켜졌는지 확인
-        if self.mp.wait_with_class_name(20, 0.5, "HwpApp : 9.0"):
-            pass
-        else:
-            Msgbox.error("한글이 켜지지 않았습니다.")
+        self.is_process_open(fname, "HwpApp : 9.0")
 
         self.time.sleep(5)
 

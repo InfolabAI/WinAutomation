@@ -26,15 +26,17 @@ class Manage_saving(InterfaceU):
         os.system("mkdir " + tmp_path)
 
         self.mp.wait_for_process_open_with_name("다른 이름으로")
-        self.time.sleep(1)
+        self.time.sleep(0.1)
         pa.hotkey("ctrl", "l")
-        self.time.sleep(1)
+        self.time.sleep(0.1)
         pa.typewrite(tmp_path)
-        self.time.sleep(1)
+        self.time.sleep(0.1)
         pa.press("enter")
-        self.time.sleep(1)
+        self.time.sleep(0.1)
         pa.hotkey("alt", "s")
 
         self.time.sleep(5)
+        # 결재정보를 저장하고 있다는 창 이름이 '알림'이다.
+        self.mp.wait_kill_with_name(10,0.5,"알림")
         os.system(command_kill_format + exe_name_dict["groupware"])
         self.time.sleep(1)

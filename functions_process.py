@@ -37,7 +37,9 @@ class Manage_process(InterfaceU):
         """
         count = 0
         ret_el = None
-        for el in pywinauto.findwindows.find_elements():
+        
+        # pdf 인쇄 중의 '진행' 창은 visible_only 를 False로 하지 않으면 안 나옴. 그래서 꺼야함.
+        for el in pywinauto.findwindows.find_elements(visible_only=False):
             if name in el.name:
                 count += 1
                 ret_el = el

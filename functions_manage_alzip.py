@@ -32,21 +32,14 @@ class Manage_alzip(Manage_interface):
         os.system(command_del_format + f'"{self.folder_name_for_rm}"')
         os.system(command_del_format + f'"{self.folder_name_for_rm + "$ENC$"}"')
 
-        # 띄어쓰기 문제 해결 및 경로 문제 해결
-        subprocess.Popen(f'"{tmp_path}\\{fname}"', shell=True)
-
-        # 켜졌는지 확인
-        if self.mp.wait_with_class_name(20, 0.5, "ALZipClass"):
-            pass
-        else:
-            Msgbox.error("알집이 켜지지 않았습니다.")
+        self.is_process_open(fname, "ALZipClass")
 
         # 메인 화면에서 control 접근 시 알집이 꺼지는 에러가 발생하는 것을 확인해서 단축키로 함
         self.time.sleep(0.5)
         pa.hotkey('ctrl', 'e')
 
         # 압축풀기가 켜졌는지 확인
-        if self.mp.wait_with_name(10, 0.5, "빠르게"):
+        if self.mp.wait_with_name(20, 0.5, "빠르게"):
             pass
         else:
             Msgbox.error("압축 풀기 창이 켜지지 않았습니다.")

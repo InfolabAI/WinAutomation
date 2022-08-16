@@ -31,8 +31,15 @@ class Manage_hwx(Manage_interface):
         #self.time.sleep(1)
 
         # 띄어쓰기 문제 해결 및 경로 문제 해결
+        '''
+        에러
+            파일명: 01-1.매입임대주택 공급관리 종합용역 시행계획(안) 보고.hwx
+            프로세스명: 매입임대주택 공급관리 종합용역 시행계획(안) 보고
+        해결: .lstrip('0123456789-. ') # 마지막 띄어쓰기까지 해야 함.
+        '''
         subprocess.Popen(f'"{tmp_path}\\{fname}"', shell=True)
-        if self.mp.wait_with_name(20, 0.5, fname[:10]):
+        fname = fname.lstrip('0123456789-. ')
+        if self.mp.wait_with_name(100, 0.5, fname[:10]):
             pass
         else:
             Msgbox.error("hwx 문서기가 켜지지 않았습니다.")

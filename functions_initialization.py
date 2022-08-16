@@ -1,5 +1,6 @@
 import os
 import pyautogui
+from functions_initialization import *
 from functions_pyautogui_msgbox import Msgbox
 '''
 프로세스마다 특성값 정리
@@ -14,6 +15,7 @@ from functions_pyautogui_msgbox import Msgbox
     - 해결방법: wrapper_object() 를 사용한다.
     - dir 사용방법: dir(window.wrpper_object()) 하면 모든 사용가능한 함수가 나온다.
     - Checkbox 다루는 법: check(), uncheck(), get_check_state()
+    - hyperlink 클릭: aa['프린터 속성Hyperlink'].wrapper_object().invoke()
 
 1. alzip
 class_name (title): ALZipClass (...알집)
@@ -105,6 +107,9 @@ class_name (title):
 pc저장버튼: 
 
 '''
+#valid_file_names = [ "명세", "견적", "매출", "청구", "증빙", "통장", "보고", "명단", "요청", "확인", "영수", "조서", "검사", "기성", "증명", "사진", "고지", "선금", "이행", "계약", "소유", "등기", "대장", "계산", "정산", "료", "약정", "계좌", "집행", "지출", "내역"]
+invalid_file_names = ["평가서", "회보", "일계"]
+
 tmp_env = os.environ["TEMP"]
 tmp_path = tmp_env + "\\pyauto"
 command_del_format = "del /q /s /f " + tmp_path + "\\"
@@ -144,6 +149,14 @@ class Initialization:
         )
         if ret == False:
             exit()
+
+        ret = Msgbox.confirm(
+            text=f"이 프로그램은 아래 단어를 포함하지 않는 첨부 문서만 인쇄합니다. 증빙에 불필요한 자료를 제외하여 자원을 절약하기 위함입니다. 추가가 필요하면 말씀해주세요. \n\n{str(invalid_file_names)} \n\n위 안내에 대한 준비가 되지 않았다면 Cancel을 눌러 종료해주세요.",
+            title="안내 사항",
+        )
+        if ret == False:
+            exit()
+        
 
         self.password = ['11']
         #password = Msgbox.prompt(

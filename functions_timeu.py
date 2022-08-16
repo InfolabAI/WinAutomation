@@ -2,7 +2,7 @@ import time
 
 
 class TimeU:
-    def __init__(self, weight=1):
+    def __init__(self, weight=0.5):
         self.weight = weight
 
     def sleep(self, mag):

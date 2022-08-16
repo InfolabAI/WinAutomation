@@ -1,4 +1,5 @@
 import os
+import subprocess
 from functions_process import Manage_process
 from functions_pyautogui_msgbox import Msgbox
 from functions_initialization import *
@@ -17,6 +18,13 @@ class Manage_interface(InterfaceU):
         """
         전체 실행을 담당한다"""
         raise NotImplementedError()
+
+    def is_process_open(self, fname, class_name):
+        while True:
+            subprocess.Popen(f'"{tmp_path}\\{fname}"', shell=True)
+            # 켜졌는지 확인
+            if self.mp.wait_with_class_name(100, 0.5, class_name):
+                break
 
     def password_cycle(self, fname):
         """
@@ -59,7 +67,8 @@ class Manage_interface(InterfaceU):
         raise NotImplementedError()
 
     def wait_print(self):
-        self.mp.wait_with_name(10,0.5,"인쇄")
+        self.time.sleep(2)
         self.mp.wait_kill_with_name(10,0.5,"인쇄")
+        self.mp.wait_kill_with_name(10,0.5,"진행")
         self.time.sleep(1)
         

@@ -1,4 +1,6 @@
 import os
+from functions_timeu import TimeU
+from functions_initialization import *
 from functions_manage_alzip import Manage_alzip
 from functions_manage_excel import Manage_excel
 from functions_manage_pdf import Manage_pdf
@@ -13,8 +15,26 @@ class Print_files_in_a_folder:
         self.pdf = Manage_pdf(password_list)
         self.hwp = Manage_hwp(password_list)
         self.hwx = Manage_hwx(password_list)
+        self.time = TimeU()
+        self.invalid_file_names = invalid_file_names
+    
+    
+    def is_valid_file(self, fname):
+        '''
+        valid file 만 출력한다.'''
+        ret = True
+        for invalid_name in self.invalid_file_names:
+            if invalid_name in fname:
+                ret = False
+
+        return ret
     
     def process_fname(self, fname):
+        if not self.is_valid_file(fname):
+            return
+
+        #pdf 가 PDF 같이 대문자인 경우가 있어서 예외처리
+        fname = fname.lower()
         if ".xls" in fname or ".csv" in fname:
             self.excel.run(fname)
         if ".zip" in fname:
@@ -29,8 +49,14 @@ class Print_files_in_a_folder:
             self.hwx.run(fname)
 
     def print_files_in_a_folder(self, folder_path):
+        
+        self.time.sleep(2)
         # 본 폴더 처리
         file_list = os.listdir(folder_path)
+        # 제대로 저장이 안되었다면, False
+        if len(file_list) <= 1:
+            return False
+        
         for fname in file_list:
             self.process_hwx(fname)
 
@@ -55,3 +81,5 @@ class Print_files_in_a_folder:
         ## 한번에 처리
         for fname in additional_file_list:
             self.process_fname(fname)
+        
+        return True
