@@ -21,9 +21,7 @@ class Manage_selenium_IE(InterfaceU):
         """
         IE를 실행하고, 사용자가 필요한 화면에 도달할 때까지 기다림"""
         # WebDriver를 이용해 IE을 실행
-        driver = webdriver.Ie(
-            "C:\\Users\\AdmiN\\automation_\\driver\\ie\\IEDriverServer.exe"
-        )
+        driver = webdriver.Ie(".\\IEDriverServer.exe")
         gh_path = "http://g0.gh.or.kr"
 
         # 사이트로 이동
@@ -44,13 +42,13 @@ class Manage_selenium_IE(InterfaceU):
         self.driver = driver
 
     def move_to_target_frame(self):
-        '''
+        """
         목표 frame 으로 이동.
         
         HTML 상에는 게시글 관련 코드가 없고, frame 내부로 한단계씩 타고 들어가며 새로운 html 을 가져와야 함
         아래는 IE 전용 코드이고, chrome 은 다른 코드를 사용해야 함
         https://stackoverflow.com/questions/28761461/i-am-not-able-to-switch-to-iframe-using-internet-explorer
-        '''
+        """
         self.driver.switch_to.frame(self.driver.find_element(By.NAME, "Start"))
         self.driver.switch_to.frame(
             self.driver.find_element(By.NAME, "doc_frame_right")
@@ -73,26 +71,30 @@ class Manage_selenium_IE(InterfaceU):
         for html_el in elements[0::2]:
             html_el_list += [html_el]
 
-
         return html_el_list
-    
+
     def get_page_element(self):
-        '''
+        """
         page 선택 버튼을 가져옴.
         현재 선택된 page 의 class 는 PageCrnt 이기 때문에, 아래만 반환됨. 여기서 ... 은 빼야함.
         (Pdb) p [el.text for el in elements]
         ['2', '3', '4', '5', '6', '7', '8', '9', '10', '...']
-        '''
-        elements = self.driver.find_elements(By.XPATH,"/html/body/table/tbody/tr/td/table/tbody/tr/td/a[@class='Page']",)
-        cur_element = self.driver.find_elements(By.XPATH,"/html/body/table/tbody/tr/td/table/tbody/tr/td/a[@class='PageCrnt']",)
+        """
+        elements = self.driver.find_elements(
+            By.XPATH, "/html/body/table/tbody/tr/td/table/tbody/tr/td/a[@class='Page']",
+        )
+        cur_element = self.driver.find_elements(
+            By.XPATH,
+            "/html/body/table/tbody/tr/td/table/tbody/tr/td/a[@class='PageCrnt']",
+        )
         cur_page = int(cur_element[0].text)
 
         html_pages_el_list = []
         for html_pages_el in elements:
-            if '...' not in html_pages_el.text and int(html_pages_el.text) > cur_page:
+            if "..." not in html_pages_el.text and int(html_pages_el.text) > cur_page:
                 # ... 은 제외함. 또한 현재 보고 있는 페이지보다 뒷 페이지만 리턴함.
                 html_pages_el_list += [html_pages_el]
-        
+
         return html_pages_el_list
 
     def end_to_end(self):
@@ -101,7 +103,6 @@ class Manage_selenium_IE(InterfaceU):
         self.wait_login()
         self.move_to_target_frame()
 
-
         html_pages_el_list = self.get_page_element()
         while True:
             # 현재 페이지 처리
@@ -109,7 +110,7 @@ class Manage_selenium_IE(InterfaceU):
             for html_el in html_el_list:
                 while True:
                     process_el = self.mp.retry_click_until_process_open(html_el)
-                    #os.system(command_kill_format + exe_name_dict["groupware"])
+                    # os.system(command_kill_format + exe_name_dict["groupware"])
                     self.msaving.saving_files_in_one_paper(process_el)
                     is_saved = self.pff.print_files_in_a_folder(tmp_path)
                     if is_saved:
@@ -119,7 +120,7 @@ class Manage_selenium_IE(InterfaceU):
                 break
 
             # 다음 페이지 넘기기
-            page_el = html_pages_el_list[0] # 보지 않은 페이지 중 첫 번재 페이지.
+            page_el = html_pages_el_list[0]  # 보지 않은 페이지 중 첫 번재 페이지.
             try:
                 # 혹시나 첫번째 클릭으로 넘어가면 두 번재 클릭 때, 에러가 나기 때문.
                 page_el.click()
@@ -129,5 +130,5 @@ class Manage_selenium_IE(InterfaceU):
             except:
                 pass
             html_pages_el_list = self.get_page_element()
-        
+
         Msgbox.alert(text="종료되었습니다.", title="안내")

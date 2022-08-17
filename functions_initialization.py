@@ -1,8 +1,10 @@
 import os
-import pyautogui
+import winreg
+
 from functions_initialization import *
 from functions_pyautogui_msgbox import Msgbox
-'''
+
+"""
 프로세스마다 특성값 정리
 0. 노하우
 - 하나의 프로그램에서 다수의 창 (e.g., 인쇄 등)이 떠도, Application().connect(class_name=<프로그램의 class_name (e.g., ALZipClass)>) 으로 통일.
@@ -106,8 +108,8 @@ class_name (title):
 class_name (title): 
 pc저장버튼: 
 
-'''
-#valid_file_names = [ "명세", "견적", "매출", "청구", "증빙", "통장", "보고", "명단", "요청", "확인", "영수", "조서", "검사", "기성", "증명", "사진", "고지", "선금", "이행", "계약", "소유", "등기", "대장", "계산", "정산", "료", "약정", "계좌", "집행", "지출", "내역"]
+"""
+# valid_file_names = [ "명세", "견적", "매출", "청구", "증빙", "통장", "보고", "명단", "요청", "확인", "영수", "조서", "검사", "기성", "증명", "사진", "고지", "선금", "이행", "계약", "소유", "등기", "대장", "계산", "정산", "료", "약정", "계좌", "집행", "지출", "내역"]
 invalid_file_names = ["평가서", "회보", "일계"]
 
 tmp_env = os.environ["TEMP"]
@@ -156,24 +158,30 @@ class Initialization:
         )
         if ret == False:
             exit()
-        
 
-        self.password = ['11']
-        #password = Msgbox.prompt(
+        # IE Selenium Driver 를 위한 Reg 등록
+        key = winreg.HKEY_LOCAL_MACHINE
+        subkey = "SOFTWARE\\Wow6432Node\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\FEATURE_BFCACHE"
+        cr_key = winreg.CreateKey(key, subkey)
+        winreg.SetValueEx(cr_key, "iexplore.exe", 0, winreg.REG_DWORD, 0x0)
+        winreg.CloseKey(cr_key)
+
+        self.password = ["11"]
+        # password = Msgbox.prompt(
         #    text="인쇄 진행 중 암호가 걸린 파일을 만났을 때 시도할 암호 리스트를 입력해주세요. 입력한 암호들을 순서대로 적용합니다. \n\n예를 들어, 사용하는 암호가 0982! 와 2832@ 두 개라면, 아래 예와 같이 입력하면 됩니다. 세 개 이상이어도 동일한 규칙으로 적으시면 됩니다. 이 양식을 지키지 않으면 오류가 발생합니다. \n\n각 암호를 구분하는 기호는 , (쉼표) 입니다. \n\n예) \n0982!,2832@",
         #    title="안내 사항",
-        #)
-        #if password is None:
+        # )
+        # if password is None:
         #    exit()
 
-        #password = password.replace(" ", "").split(",")
-        #self.password = password
+        # password = password.replace(" ", "").split(",")
+        # self.password = password
 
-        #ret = Msgbox.confirm(
+        # ret = Msgbox.confirm(
         #    text=f"입력한 암호 리스트는 다음과 같습니다. 의도와 다른 값이라면 Cancel을 눌러 종료해주세요. \n\n{str(password)}",
         #    title="입력한 암호 확인",
-        #)
-        #if ret == False:
+        # )
+        # if ret == False:
         #    exit()
 
         for k, exe_name in exe_name_dict.items():
