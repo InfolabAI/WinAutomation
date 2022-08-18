@@ -39,7 +39,7 @@ class Manage_alzip(Manage_interface):
         pa.hotkey('ctrl', 'e')
 
         # 압축풀기가 켜졌는지 확인
-        if self.mp.wait_with_name(20, 0.5, "빠르게"):
+        if self.mp.wait_with_name(50, 0.5, "빠르게"):
             pass
         else:
             Msgbox.error("압축 풀기 창이 켜지지 않았습니다.")

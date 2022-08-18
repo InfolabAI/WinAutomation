@@ -35,14 +35,20 @@ class Print_files_in_a_folder:
 
         #pdf 가 PDF 같이 대문자인 경우가 있어서 예외처리
         fname = fname.lower()
-        if ".xls" in fname or ".csv" in fname:
-            self.excel.run(fname)
-        if ".zip" in fname:
-            self.alzip.run(fname)
-        if ".pdf" in fname:
-            self.pdf.run(fname)
-        if ".hwp" in fname:
-            self.hwp.run(fname)
+
+        #띄어쓰기 예외처리는 subprocess 구문에서 처리하고 있음.
+
+        try:
+            if ".xls" in fname or ".csv" in fname:
+                self.excel.run(fname)
+            if ".zip" in fname:
+                self.alzip.run(fname)
+            if ".pdf" in fname:
+                self.pdf.run(fname)
+            if ".hwp" in fname:
+                self.hwp.run(fname)
+        except:
+            pass
     
     def process_hwx(self, fname):
         if ".hwx" in fname:
@@ -79,6 +85,9 @@ class Print_files_in_a_folder:
             additional_file_list += dir_file_list
 
         ## 한번에 처리
+        #for fname in additional_file_list:
+        #    self.process_hwx(fname)
+
         for fname in additional_file_list:
             self.process_fname(fname)
         

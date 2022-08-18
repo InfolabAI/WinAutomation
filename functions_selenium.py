@@ -16,6 +16,7 @@ class Manage_selenium_IE(InterfaceU):
         self.mp = Manage_process()
         self.msaving = Manage_saving()
         self.pff = Print_files_in_a_folder(password_list=init.password)
+        self.skip_num = init.skip_num
 
     def wait_login(self):
         """
@@ -103,32 +104,41 @@ class Manage_selenium_IE(InterfaceU):
         self.wait_login()
         self.move_to_target_frame()
 
-        html_pages_el_list = self.get_page_element()
-        while True:
-            # 현재 페이지 처리
-            html_el_list = self.get_document_element_list()
-            for html_el in html_el_list:
-                while True:
-                    process_el = self.mp.retry_click_until_process_open(html_el)
-                    # os.system(command_kill_format + exe_name_dict["groupware"])
-                    self.msaving.saving_files_in_one_paper(process_el)
-                    is_saved = self.pff.print_files_in_a_folder(tmp_path)
-                    if is_saved:
-                        break
 
-            if len(html_pages_el_list) == 0:
-                break
-
-            # 다음 페이지 넘기기
-            page_el = html_pages_el_list[0]  # 보지 않은 페이지 중 첫 번재 페이지.
-            try:
-                # 혹시나 첫번째 클릭으로 넘어가면 두 번재 클릭 때, 에러가 나기 때문.
-                page_el.click()
-                self.time.sleep(1)
-                page_el.click()
-                self.time.sleep(3)
-            except:
-                pass
+        tmp_skip_num = 0 
+        with open('./입력 상황.txt', 'w', encoding = 'cp949') as ftext:
             html_pages_el_list = self.get_page_element()
+            while True:
+                # 현재 페이지 처리
+                html_el_list = self.get_document_element_list()
+                for html_el in html_el_list:
+                    tmp_skip_num += 1
+                    if tmp_skip_num <= int(self.skip_num):
+                        continue
+                        
+                    while True:
+                        process_el = self.mp.retry_click_until_process_open(html_el)
+                        #os.system(command_kill_format + exe_name_dict["groupware"])
+                        self.msaving.saving_files_in_one_paper(process_el)
+                        is_saved = self.pff.print_files_in_a_folder(tmp_path)
+                        if is_saved:
+                            break
 
-        Msgbox.alert(text="종료되었습니다.", title="안내")
+                    ftext.write(html_el.text)
+
+                if len(html_pages_el_list) == 0:
+                    break
+
+                # 다음 페이지 넘기기
+                page_el = html_pages_el_list[0] # 보지 않은 페이지 중 첫 번재 페이지.
+                try:
+                    # 혹시나 첫번째 클릭으로 넘어가면 두 번재 클릭 때, 에러가 나기 때문.
+                    page_el.click()
+                    self.time.sleep(1)
+                    page_el.click()
+                    self.time.sleep(3)
+                except:
+                    pass
+                html_pages_el_list = self.get_page_element()
+            
+            Msgbox.alert(text="종료되었습니다.", title="안내")

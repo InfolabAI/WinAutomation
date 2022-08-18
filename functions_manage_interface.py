@@ -30,13 +30,19 @@ class Manage_interface(InterfaceU):
         """
         password list 의 모든 password 를 처리함
         """
-        while self.pw.password_start_check():
-            ret = Msgbox.file_reopen(text="파일에 암호가 걸려있습니다. 올바른 암호를 입력한 후, 이 창의 암호 입력 완료 버튼을 눌러주세요. \n\n만약 암호 입력에 에러가 발생했다면, 파일 다시 열기 버튼를 눌러 파일을 새로 열고 암호를 입력한 후, 이 창의 암호 입력 완료 버튼을 눌러주세요.", title="암호 입력 필요")
-            if ret:
-                self.process_kill()
-                self.time.sleep(2)
-                self.process(fname)
+        pass
+        # 사용자가 암호를 입력하게 하는 기능
+        #while self.pw.password_start_check():
+        #    ret = Msgbox.file_reopen(text="파일에 암호가 걸려있습니다. 올바른 암호를 입력한 후, 이 창의 암호 입력 완료 버튼을 눌러주세요. \n\n만약 암호 입력에 에러가 발생했다면, 파일 다시 열기 버튼를 눌러 파일을 새로 열고 암호를 입력한 후, 이 창의 암호 입력 완료 버튼을 눌러주세요.", title="암호 입력 필요")
+        #    if ret:
+        #        self.process_kill()
+        #        self.time.sleep(2)
+        #        self.process(fname)
             
+
+
+
+
         # password 입력 창이 없으면 자동 종료.
         #if self.pw.password_start_check():
         #    for i, pw in enumerate(self.pw.password_list):
