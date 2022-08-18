@@ -37,12 +37,13 @@ class Manage_hwx(Manage_interface):
             프로세스명: 매입임대주택 공급관리 종합용역 시행계획(안) 보고
         해결: .lstrip('0123456789-. ') # 마지막 띄어쓰기까지 해야 함.
         '''
-        subprocess.Popen(f'"{tmp_path}\\{fname}"', shell=True)
+        open_path = f'"{tmp_path}\\{fname}"'
+        subprocess.Popen(open_path, shell=True)
         fname = fname.lstrip('0123456789-. ')
         if self.mp.wait_with_name(100, 0.5, fname[:10]):
             pass
         else:
-            Msgbox.error("hwx 문서기가 켜지지 않았습니다.")
+            Msgbox.error(f"hwx 문서기가 켜지지 않았습니다. {open_path}, {fname[:10]}")
 
         #self.time.sleep(5)
 

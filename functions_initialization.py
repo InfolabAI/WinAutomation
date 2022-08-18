@@ -137,7 +137,8 @@ class Initialization:
             exit()
 
         ret = Msgbox.confirm(
-            text="진행 중에 비밀번호가 걸린 파일을 만나면 사용자가 비밀번호를 입력해야 합니다. 추후 추가 기능으로 비밀번호 자동 입력 기능을 개발할수도 있습니다. \n\n위 안내에 대한 준비가 되지 않았다면 Cancel을 눌러 종료해주세요.",
+            #text="진행 중에 비밀번호가 걸린 파일을 만나면 사용자가 비밀번호를 입력해야 합니다. 추후 추가 기능으로 비밀번호 자동 입력 기능을 개발할수도 있습니다. \n\n위 안내에 대한 준비가 되지 않았다면 Cancel을 눌러 종료해주세요.",
+            text="진행 중에 비밀번호가 걸린 파일을 만나면 출력 없이 지나갑니다. 추후 추가 기능으로 비밀번호 자동 입력 기능을 개발할수도 있습니다. \n\n위 안내에 대한 준비가 되지 않았다면 Cancel을 눌러 종료해주세요.",
             title="안내 사항",
         )
         if ret == False:
@@ -156,7 +157,13 @@ class Initialization:
         )
         if ret == False:
             exit()
-        
+
+        self.skip_num = Msgbox.prompt(
+            text=f"인쇄하지 않고 넘길 문서 갯수를 입력해주세요. 입력하지 않으면 문서를 넘기지 않습니다.",
+            title="안내 사항",
+        )
+        if self.skip_num == '':
+            self.skip_num = '0'
 
         self.password = ['11']
         #password = Msgbox.prompt(
